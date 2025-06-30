@@ -1,8 +1,6 @@
 package kit;
 
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 public class P42577_전화번호_목록 {
