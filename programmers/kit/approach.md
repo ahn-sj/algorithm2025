@@ -60,7 +60,74 @@ loop:
 
 ---
 
+## 42577_전화번호 목록
 
+| 시간 복잡도 | 자료 구조 | 소요 시간 |
+|---|---|-------|
+| O(n * m^2) | Hash | 35m   |
 
+```markdown
+✅ 이론적 비교
+1. O(n * m²)
+문자열 길이 m이 크면 매우 느려질 수 있음
+
+예:
+- n = 100,000, m = 20 → 100,000 * 400 = 40,000,000
+- m = 100 → 100,000 * 10,000 = 1,000,000,000
+
+2. O(n log n)
+문자열 정렬 기반 알고리즘에서 자주 나옴
+log n은 증가 속도가 매우 느림
+
+예:
+- n = 100,000 → log n ≈ 17, 전체 ≈ 1,700,000
+
+| n   | m   | O(n \* m²)            | O(n log n)          | 더 빠른 것       |
+| --- | --- | --------------------- | ------------------- | ------------ |
+| 10⁵ | 10  | 10⁵ \* 100 = 10⁷      | 10⁵ \* 17 ≈ 1.7×10⁶ | ✅ O(n log n) |
+| 10⁵ | 50  | 10⁵ \* 2500 = 2.5×10⁸ | 10⁵ \* 17 ≈ 1.7×10⁶ | ✅ O(n log n) |
+| 10⁵ | 200 | 10⁵ \* 4×10⁴ = 4×10⁹  | 10⁵ \* 17 ≈ 1.7×10⁶ | ✅ O(n log n) |
+
+```
+
+- 목표: 어떤 번호가 다른 번호의 접두어인 경우가 있으면 false를 그렇지 않으면 true를 return
+
+```
+sol 1: return phone.startWith(next) -> 시간복잡도 O(n + n log n)
+sol 2: 유형이 해시인데 해시가 어디서 쓰이지..?
+```
+해시를 어떻게 활용해야 하는거지..?
+
+```java
+// sol1: O(n log n)
+Arrays.sort(phoneBook); // O(n log n)
+
+for (int i = 0; i < phoneBook.length - 1; i++) { // O(n - 1)
+    if (phoneBook[i + 1].startsWith(phoneBook[i])) {
+        return false;
+    }
+}
+return true;
+```
+
+```java
+// sol2: O(n * m^2)
+Set<String> phoneSet = new HashSet<>();
+
+for (int i = 0; i < phoneBook.length; i++) { // O(n)
+    phoneSet.add(phoneBook[i]);
+}
+
+for (int i = 0; i < phoneBook.length; i++) { // O(n * (m * m-1))
+    for (int j = 0; j < phoneBook[i].length(); j++) {
+        if (phoneSet.contains(phoneBook[i].substring(0, j))) {
+            return false;
+        }
+    }
+}
+return true;
+```
+
+---
 
 
