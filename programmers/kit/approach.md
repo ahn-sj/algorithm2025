@@ -157,3 +157,53 @@ return true;
 
 ---
 
+## P12906 같은 숫자는 싫어
+
+| 시간 복잡도 | 자료 구조 | 소요 시간 |
+|---|---|-------|
+| O(n * m^2) | Hash | 35m   |
+
+### Stack vs List 시간 복잡도
+
+```markdown
+✅ Stack (java.util.Stack)
+- 내부적으로 Vector 기반의 배열 구조이며, 동기화를 지원함
+
+push(E item)         -> O(1)
+pop()                -> O(1)
+peek()               -> O(1)
+search(Object o)     -> O(n)
+empty()              -> O(1)
+
+
+✅ ArrayList (java.util.ArrayList)
+- 배열 기반, 인덱스 접근이 빠름
+
+get(int index)       -> O(1)
+add(E e)             -> O(1)*  (*용량 초과 시 내부 배열 복사로 O(n))
+add(int index, E e)  -> O(n)
+remove(int index)    -> O(n)
+contains(Object o)   -> O(n)
+
+
+✅ LinkedList (java.util.LinkedList)
+- 양방향 연결 리스트 기반, 삽입/삭제에 유리함
+
+get(int index)       -> O(n)
+add(E e)             -> O(1)
+add(int index, E e)  -> O(n)
+remove(int index)    -> O(n)
+addFirst(E e)        -> O(1)
+addLast(E e)         -> O(1)
+removeFirst()        -> O(1)
+removeLast()         -> O(1)
+```
+
+✅ 비교 요약
+
+연산           | Stack | ArrayList | LinkedList
+-------------- | ----- | --------- | ----------
+삽입 (끝에)     | O(1)  | O(1)*     | O(1)
+삭제 (끝에서)   | O(1)  | O(1)      | O(1)
+중간 삽입/삭제 | ✖     | O(n)      | O(n)
+조회 (인덱스)   | O(1)  | O(1)      | O(n)
