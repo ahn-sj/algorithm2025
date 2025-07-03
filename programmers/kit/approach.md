@@ -207,3 +207,88 @@ removeLast()         -> O(1)
 삭제 (끝에서)   | O(1)  | O(1)      | O(1)
 중간 삽입/삭제 | ✖     | O(n)      | O(n)
 조회 (인덱스)   | O(1)  | O(1)      | O(n)
+
+## 42586 기능 개발
+
+| 시간 복잡도 | 자료 구조 | 소요 시간 |
+|---|---|-------|
+| O(n) | Queue | 1h   |
+
+- 목표: 배포마다 몇 개의 기능이 배포되는지 리턴
+- 조건: 진도가 100%이면 서비스에 반영 가능함
+
+당일 배포가 가능한지를 판단하는게 빠져서 마지막 테스트 케이스가 실패했음<br/>
+
+```java
+Queue<Integer> releases = new LinkedList<>();
+for (int i = 0; i < progresses.length; i++) {
+    // 당일 배포가 가능한지 progress % speed
+    boolean canSameDayRelease = ((100 - progresses[i]) % speeds[i]) == 0;
+    
+    // 기능 배포 예상 일자
+    int expected = ((100 - progresses[i]) / speeds[i]);
+    
+    if (!canSameDayRelease) { // 당일 배포 시간이 부족하여 다음날 배포
+        releases.add(expected + 1);
+    } else {
+        releases.add(expected);
+    }
+}
+```
+
+> TO ME: 큐에 대한 특징과 시간복잡도 꼼꼼하게 정리하기
+ 
+### Java Queue 특징 및 시간복잡도
+
+## ✅ LinkedList (java.util.LinkedList)
+- FIFO(First-In-First-Out) 큐로 자주 사용됨
+- 내부적으로 **이중 연결 리스트**로 구현됨
+
+| 연산                    | 설명                         | 시간복잡도 |
+|-------------------------|------------------------------|------------|
+| offer(E e)              | 큐의 뒤에 원소 추가          | O(1)       |
+| poll()                  | 큐의 앞에서 원소 제거 및 반환 | O(1)       |
+| peek()                  | 큐의 앞 원소 조회            | O(1)       |
+| remove(Object o)        | 특정 값 제거                 | O(n)       |
+| contains(Object o)      | 특정 값 포함 여부 확인       | O(n)       |
+| get(int index)          | 인덱스 접근                  | O(n)       |
+
+---
+
+## ✅ PriorityQueue (java.util.PriorityQueue)
+- 내부적으로 **힙(Heap)** 자료구조 사용 (기본은 최소 힙)
+- 요소는 우선순위에 따라 정렬되어 저장됨 (삽입 시 자동 정렬됨)
+
+| 연산                    | 설명                             | 시간복잡도 |
+|-------------------------|----------------------------------|------------|
+| offer(E e)              | 큐에 원소 삽입                   | O(log n)   |
+| poll()                  | 가장 높은 우선순위 원소 제거     | O(log n)   |
+| peek()                  | 가장 높은 우선순위 원소 조회     | O(1)       |
+| remove(Object o)        | 특정 값 제거                     | O(n)       |
+| contains(Object o)      | 특정 값 포함 여부 확인           | O(n)       |
+| heapify (내부 재정렬)   | 정렬 유지 (삽입/삭제 시 자동)    | O(log n)   |
+
+---
+
+## 📌 요약 비교
+
+| 연산           | LinkedList | PriorityQueue |
+|----------------|------------|---------------|
+| offer()        | O(1)       | O(log n)      |
+| poll()         | O(1)       | O(log n)      |
+| peek()         | O(1)       | O(1)          |
+| remove(o)      | O(n)       | O(n)          |
+| contains(o)    | O(n)       | O(n)          |
+
+---
+
+## 12909 올바른 괄호
+
+| 시간 복잡도 | 자료 구조 | 소요 시간 |
+|---|---|-------|
+
+```markdown
+예전에 정리한 팁
+- 괄호 문제의 경우 Stack<Boolean>도 괜찮지만 괄호 짝 맞추기 문제에서는 여러 종류의 괄호(`(`, `{`, `[` 등)를 처리해야 할 경우가 많아서 스택에 Character 타입으로 괄호 자체를 저장하는 것을 권장
+- split(””)는 불필요한 오버헤드를 발생시킴. for loop & charAt(i) 를 활용
+```
