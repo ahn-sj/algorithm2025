@@ -340,3 +340,99 @@ for (int i = 0; i < progresses.length; i++) {
 
 lost: 체육복을 도난당한 학생의 번호<br/>
 reserve: 여벌 체육복을 가져온 학생의 번호
+
+### 42885 구명보트
+
+| 시간 복잡도 | 자료 구조 | 소요 시간 |
+|---|---|-------|
+| O(n log n) | Array | 1h |
+
+- 목표: 모든 사람을 구출하기 위해 필요한 구명보트 개수의 최솟값
+- 조건
+  - 구명보트는 한 번에 최대 2명씩 밖에 탈 수 없고, 무게 제한이 있음
+  - 구명보트를 최대한 적게 사용하여 모든 사람을 구출
+
+**처음 시도 (실패)**
+
+- 최대 2명씩밖에 탈 수 없다는 조건을 고려하지 못해서 큐로 접근을 했음
+- 그리고, 무거운 사람 + 가벼운 사람을 해야 최소한의 구명보트 개수를 구할 수 있음
+
+```java
+import java.util.*;
+
+class Solution {
+    public int solution(int[] people, int limit) {
+        Arrays.sort(people);
+        
+        Queue<Integer> weightQueue = new LinkedList<>();
+        for (int weight : people) {
+            weightQueue.add(weight);
+        }
+        
+        int boat = 1;
+        int sum = weightQueue.poll();
+        
+        while (!weightQueue.isEmpty()) {
+            if (sum + weightQueue.peek() <= limit) {
+                sum += weightQueue.poll();
+            } else {
+                boat++;
+                sum = 0;
+            }
+        }
+        return boat;
+    }
+}
+```
+
+#### 반례
+```markdown
+limit = 100
+input = [10, 20, 30, 70, 80, 90] 
+- 무거운 사람 + 가벼운 사람: 구명보트 개수 = 3
+- 가벼운 사람 + 가벼운 사람: 구명보트 개수 = 4
+```
+
+**두 번째 시도 (성공)**
+
+- 정렬 후 투포인터로 접근
+- 겹치는 순간에 대한 처리 필요
+  - case1: left 그대로, right 움직임 -> left == right
+  - case2: left 움직임, right 움직임 -> left > right
+
+```java
+import java.util.*;
+
+class Solution {
+    public int solution(int[] people, int limit) {
+        Arrays.sort(people);
+        
+        int left = 0; // first index
+        int right = people.length - 1; // last index
+        int boat = 0;
+        
+        while (left < right) {
+            int weight = people[left] + people[right];
+            
+            if (weight <= limit) {
+                left++;
+            }
+            right--;
+            boat++;
+        }
+        // 겹치는 순간에 대한 처리 필요
+        // case1: left 그대로, right 움직임 -> left == right
+        // case2: left 움직임, right 움직임 -> left > right
+        return left == right ? boat + 1 : boat;
+    }
+}
+
+```
+
+
+### 42860 조이스틱
+
+| 시간 복잡도 | 자료 구조 | 소요 시간 |
+|---|---|-------|
+
+
